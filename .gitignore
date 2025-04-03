@@ -2,4 +2,4 @@
 /unsloth_compiled_cache
 /vllm_env_2
 /vllm_env_3
-/unsloth_compiled_cache
+*.pyc

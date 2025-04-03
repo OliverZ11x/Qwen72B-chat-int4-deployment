@@ -58,7 +58,7 @@ class ModelService:
         system_content = """
         你是赛丰AI助手，请回答用户提问
         """
-        return f"{system_content}\n{user_input}"
+        return f"<|system|>\n{system_content}\n<|user|>\n{user_input}\n<|assistant|>"
 
     async def generate_response(self, user_input: str) -> str:
         prompt = self.create_prompt(user_input)
