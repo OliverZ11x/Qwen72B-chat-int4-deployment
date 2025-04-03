@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  chat_service:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./models:/home/ubuntu/.cache/modelscope/hub/models/qwen/Qwen-72B-Chat-Int4
+      - ./src:/app/src
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
