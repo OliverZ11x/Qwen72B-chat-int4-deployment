@@ -3,3 +3,4 @@
 /vllm_env_2
 /vllm_env_3
 *.pyc
+/vllm_env
