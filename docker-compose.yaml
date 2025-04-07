@@ -6,14 +6,18 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./models:/home/ubuntu/.cache/modelscope/hub/models/qwen/Qwen-72B-Chat-Int4
+      - /home/ubuntu/.cache/modelscope/hub/models/qwen/Qwen-72B-Chat-Int4:/app/models
       - ./src:/app/src
+
+    # 添加共享内存配置
+    shm_size: '16gb'  # 分配16GB共享内存，可根据需要调整
+
     deploy:
       resources:
         reservations:
           devices:
             - driver: nvidia
-              count: 1
+              count: all
               capabilities: [gpu]
     restart: unless-stopped
     healthcheck:

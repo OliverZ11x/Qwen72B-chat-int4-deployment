@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException, Depends
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
-from server_vllm import ModelService
+from src.server_vllm import ModelService
 import logging
 from typing import Optional, AsyncIterable
 import uvicorn

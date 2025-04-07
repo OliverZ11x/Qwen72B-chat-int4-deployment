@@ -6,14 +6,14 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 class ModelService:
-    def __init__(self, model_path="/home/ubuntu/.cache/modelscope/hub/models/qwen/Qwen-72B-Chat-Int4"):
+    def __init__(self, model_path="/app/models"):
         self.model = None
         self.tokenizer = None
         self.model_path = model_path
         self.sampling_params = SamplingParams(
             temperature=0.8,
-            top_p=0.95,
-            max_tokens=8096,
+            top_p=0.90,
+            max_tokens=16192,
         )
     # 在 ModelService 类中添加此方法
     def update_sampling_params(self, max_tokens=None, temperature=None, top_p=None):
@@ -40,9 +40,9 @@ class ModelService:
             self.model = LLM(
                     model=self.model_path,
                     trust_remote_code=True,
-                    tensor_parallel_size=2,  # 设置为 2 卡并行
-                    max_model_len=15500,  # 或者 16384 以减少显存需求
-                    gpu_memory_utilization=0.95,  # 调高显存利用率
+                    tensor_parallel_size=4,  # 设置为 2 卡并行
+                    max_model_len=16192,  # 或者 16384 以减少显存需求
+                    gpu_memory_utilization=0.90,  # 调高显存利用率
                     )
             
             # vllm 会自动加载相应的 tokenizer
