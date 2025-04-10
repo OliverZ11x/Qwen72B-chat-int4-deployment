@@ -54,11 +54,8 @@ class ModelService:
             return False
 
     def create_prompt(self, user_input: str) -> str:
-        # 手动创建提示格式，因为不使用 unsloth 的 chat_template
-        system_content = """
-        你是赛丰AI助手，请回答用户提问
-        """
-        return f"<|system|>\n{system_content}\n<|user|>\n{user_input}\n<|assistant|>"
+        # 直接返回用户输入，不需要提示词模板
+        return user_input
 
     async def generate_response(self, user_input: str) -> str:
         prompt = self.create_prompt(user_input)
