@@ -12,7 +12,7 @@ model_service: Optional[ModelService] = None
 logger = logging.getLogger(__name__)
 
 class ChatRequest(BaseModel):
-    message: str
+    message: list[dict]
 
 class ChatResponse(BaseModel):
     response: str
@@ -30,11 +30,12 @@ async def chat_endpoint(request: ChatRequest):
     try:
         if not model_service:
             raise HTTPException(status_code=503, detail="服务未就绪")
-        response = await model_service.generate_response(request.message)
+        response = await model_service.generate_response(request.message)  # 传入消息列表
         return ChatResponse(response=response)
     except Exception as e:
         logger.error(f"处理请求时出错: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.post("/api/chat/stream")
 async def chat_stream_endpoint(request: ChatRequest):

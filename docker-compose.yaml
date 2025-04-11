@@ -6,7 +6,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - /home/ubuntu/.cache/modelscope/hub/models/qwen/Qwen-72B-Chat-Int4:/app/models
+      - /home/ubuntu/.cache/modelscope/hub/models/qwen/Qwen2___5-7B-Instruct-GPTQ-Int4:/app/models
       - ./src:/app/src
 
     # 添加共享内存配置
