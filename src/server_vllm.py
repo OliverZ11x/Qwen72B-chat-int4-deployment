@@ -13,7 +13,7 @@ class ModelService:
         self.sampling_params = SamplingParams(
             temperature=0.8,
             top_p=0.90,
-            max_tokens=16000,
+            max_tokens=32768,
         )
     # 在 ModelService 类中添加此方法
     def update_sampling_params(self, max_tokens=None, temperature=None, top_p=None):
@@ -42,7 +42,7 @@ class ModelService:
                     trust_remote_code=True,
                     tensor_parallel_size=4,  # 设置为 4 卡并行
                     enforce_eager=True,  # 强制使用 eager execution 模式
-                    max_model_len=16000,  # 或者 16384 以减少显存需求
+                    max_model_len=32768,  # 或者 16384 以减少显存需求
                     gpu_memory_utilization=0.65,  # 调高显存利用率
                     max_num_seqs=4  # 减小并发序列数量
                     )
@@ -94,6 +94,7 @@ class ModelService:
                 prompts=[prompt],
                 sampling_params=self.sampling_params,
             )
+            print(f"生成的输出: {outputs[0].outputs[0].text.strip()}")
             return outputs[0].outputs[0].text.strip()
         except Exception as e:
             logger.error(f"生成响应失败: {e}")
