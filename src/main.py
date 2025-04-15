@@ -13,7 +13,10 @@ logger = logging.getLogger(__name__)
 
 class ChatRequest(BaseModel):
     message: list[dict]
-
+    max_tokens: Optional[int] = None
+    temperature: Optional[float] = None
+    top_p: Optional[float] = None
+    
 class ChatResponse(BaseModel):
     response: str
 
@@ -30,7 +33,15 @@ async def chat_endpoint(request: ChatRequest):
     try:
         if not model_service:
             raise HTTPException(status_code=503, detail="服务未就绪")
-        response = await model_service.generate_response(request.message)  # 传入消息列表
+        
+        # 更新采样参数
+        model_service.update_sampling_params(
+            max_tokens=request.max_tokens,
+            temperature=request.temperature,
+            top_p=request.top_p
+        )
+        
+        response = await model_service.generate_response(request.message)
         return ChatResponse(response=response)
     except Exception as e:
         logger.error(f"处理请求时出错: {e}")

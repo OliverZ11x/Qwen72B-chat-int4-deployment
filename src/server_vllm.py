@@ -17,24 +17,18 @@ class ModelService:
         )
     # 在 ModelService 类中添加此方法
     def update_sampling_params(self, max_tokens=None, temperature=None, top_p=None):
-        """更新采样参数"""
+        """更新采样参数，只更新非 None 的参数"""
         if max_tokens is not None:
             self.sampling_params.max_tokens = max_tokens
         if temperature is not None:
             self.sampling_params.temperature = temperature
         if top_p is not None:
             self.sampling_params.top_p = top_p
+        logger.info(f"更新后的采样参数: max_tokens={self.sampling_params.max_tokens}, temperature={self.sampling_params.temperature}, top_p={self.sampling_params.top_p}")
 
     async def load_model(self):
         try:
             logger.info(f"正在从 {self.model_path} 加载模型...")
-            # self.model = LLM(
-            #     model=self.model_path,
-            #     tensor_parallel_size=2,  # 设置为 2 卡并行
-            #     max_seq_len_to_capture=8096,
-            #     gpu_memory_utilization=0.95,
-            #     quantization = "gptq"
-            # )
             
             # Create an LLM.
             self.model = LLM(
