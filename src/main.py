@@ -47,26 +47,6 @@ async def chat_endpoint(request: ChatRequest):
         logger.error(f"处理请求时出错: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-
-@app.post("/api/chat/stream")
-async def chat_stream_endpoint(request: ChatRequest):
-    try:
-        if not model_service:
-            raise HTTPException(status_code=503, detail="服务未就绪")
-            
-        async def generate_stream() -> AsyncIterable[str]:
-            async for text_chunk in model_service.generate_stream_response(request.message):
-                yield f"data: {text_chunk}\n\n"
-                
-        return StreamingResponse(
-            generate_stream(),
-            media_type="text/event-stream"
-        )
-        
-    except Exception as e:
-        logger.error(f"处理流式请求时出错: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
-
 @app.get("/health")
 async def health_check():
     if model_service and model_service.model:

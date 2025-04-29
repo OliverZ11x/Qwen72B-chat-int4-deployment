@@ -4,3 +4,4 @@
 /vllm_env_3
 *.pyc
 /vllm_env
+/models

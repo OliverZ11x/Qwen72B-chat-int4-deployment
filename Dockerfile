@@ -22,4 +22,4 @@ ENV CUDA_VISIBLE_DEVICES=0,1,2,3
 
 
 # 运行服务
-CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"， "--access-logfile", "/app/logs/access.log"]

@@ -8,6 +8,7 @@ services:
     volumes:
       - /home/ubuntu/.cache/modelscope/hub/models/qwen/Qwen2___5-72B-Instruct-GPTQ-Int4:/app/models
       - ./src:/app/src
+      - ./logs:/app/logs
 
     # 添加共享内存配置
     shm_size: '16gb'  # 分配16GB共享内存，可根据需要调整
