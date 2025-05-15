@@ -43,8 +43,8 @@ async def chat_endpoint(request: ChatRequest):
             temperature=request.temperature,
             top_p=request.top_p
         )
-        response, input_token_count, output_token_count, total_token_count = await model_service.generate_response(request.message)
-        return ChatResponse(response=response, input_token_count= input_token_count, output_token_count= output_token_count, total_token_count= total_token_count)
+        response, input_token, output_token, total_token = await model_service.generate_response(request.message)
+        return ChatResponse(response=response, input_token_count= input_token, output_token_count= output_token, totol_token_count= total_token)
     except Exception as e:
         logger.error(f"处理请求时出错: {e}")
         raise HTTPException(status_code=500, detail=str(e))
