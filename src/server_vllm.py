@@ -87,7 +87,7 @@ class ModelService:
             
             print(f"生成的输出: {response_text}")
             print(f"Token统计 - 输入: {input_tokens}, 输出: {output_tokens}, 总计: {total_tokens}")
-            return response_text, total_tokens
+            return response_text, input_tokens, output_tokens, total_tokens
         except Exception as e:
             logger.error(f"生成响应失败: {e}")
             return "生成响应失败，发生错误。", 0

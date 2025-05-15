@@ -19,7 +19,9 @@ class ChatRequest(BaseModel):
     
 class ChatResponse(BaseModel):
     response: str
-    token_count: int
+    input_token_count: int
+    output_token_count: int
+    totol_token_count: int
 
 @app.on_event("startup")
 async def startup_event():
@@ -41,8 +43,8 @@ async def chat_endpoint(request: ChatRequest):
             temperature=request.temperature,
             top_p=request.top_p
         )
-        response, token_count = await model_service.generate_response(request.message)
-        return ChatResponse(response=response, token_count=token_count)
+        response, input_token_count, output_token_count, total_token_count = await model_service.generate_response(request.message)
+        return ChatResponse(response=response, input_token_count= input_token_count, output_token_count= output_token_count, total_token_count= total_token_count)
     except Exception as e:
         logger.error(f"处理请求时出错: {e}")
         raise HTTPException(status_code=500, detail=str(e))
