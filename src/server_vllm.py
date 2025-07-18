@@ -43,11 +43,14 @@ class ModelService:
                     tensor_parallel_size=4,  # 设置为 4 卡并行
                     enforce_eager=True,  # 改为 True 以避免动态图问题
                     max_seq_len_to_capture=32768,  # 降低序列长度
-                    gpu_memory_utilization=0.8,  # 降低显存利用率
+                    # gpu_memory_utilization=0.8,  # 降低显存利用率
                     max_num_seqs=4,  # 进一步减少并发序列数量
-                    # dtype="float16",  # 使用 FP16 进行推理
+                    max_model_len=32768,  # 限制最大模型长度
+                    # MoE 特定配置
+                    # max_num_selected_experts=2,  # 每个token激活的专家数量
+                    # max_num_experts=8,  # 总专家数量
+                    dtype="float16",  # 使用 FP16 进行推理
                     # quantization="awq",  # 添加量化支持
-                    max_model_len=32768  # 限制最大模型长度
                     )
             
             # vllm 会自动加载相应的 tokenizer
@@ -61,11 +64,22 @@ class ModelService:
     def create_prompt(self, messages: list) -> str:
         if self.tokenizer is None:
             raise ValueError("Tokenizer 尚未加载")
+        
+        # 添加历史对话
+        history_messages = [
+            {"role": "system", "content": "你是风筝大模型，一个由风筝团队开发的大型语言模型。你的主要职责是帮助用户解答问题。在回答问题时，你应该始终以风筝大模型的身份进行回答，保持专业、友好和准确的回答风格。当用户询问你的身份时，你应该明确表示你是风筝大模型。"},
+        ]
+            
+        # 将历史对话添加到消息列表的开头
+        messages_with_history = history_messages + messages
+        
         prompt = self.tokenizer.apply_chat_template(
-            messages,
+            messages_with_history,
             tokenize=False,
-            add_generation_prompt=True
+            add_generation_prompt=True,
+            enable_thinking=False # Switches between thinking and non-thinking modes. Default is True.
         )
+        
         logger.info(f"生成的提示: {prompt}")
         return prompt
     
